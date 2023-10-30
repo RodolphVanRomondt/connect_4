@@ -37,11 +37,19 @@ class Game {
         this.handleClick = this.handleClick.bind(this);
         top.addEventListener('click', this.handleClick);
 
+        let color = this.p1.color;
+
         for (let x = 0; x < this.width; x++) {
             const headCell = document.createElement('td');
             headCell.setAttribute('id', x);
-
             top.append(headCell);
+
+            $(headCell).on("mouseover", function () {
+                $(this).css("background-color", color);
+            });
+            $(headCell).on("mouseout", function () {
+                $(this).css("background-color", "");
+            });
         }
 
         board.append(top);
@@ -116,6 +124,14 @@ class Game {
 
         // switch players
         this.currPlayer = this.currPlayer === this.p1 ? this.p2 : this.p1;
+
+        let color = this.currPlayer.color;
+        $("#column-top td").on("mouseover", function () {
+            $(this).css("background-color", color);
+        });
+        $("#column-top td").on("mouseout", function () {
+            $(this).css("background-color", "");
+        });
     }
 
     /** checkForWin: check board cell-by-cell for "does a win start here?" */
