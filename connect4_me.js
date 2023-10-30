@@ -29,27 +29,26 @@ class Game {
     /** makeHtmlBoard: make HTML table and row of column tops. */
     makeHtmlBoard() {
         const board = document.getElementById('board');
+        const color = this.p1.color;
 
         // make column tops (clickable area for adding a piece to that column)
         const top = document.createElement('tr');
         top.setAttribute('id', 'column-top');
 
+        $(top).on("mouseover", "td", function () {
+            $(this).css("background-color", color);
+        });
+        $(top).on("mouseout", "td", function () {
+            $(this).css("background-color", "");
+        });
+
         this.handleClick = this.handleClick.bind(this);
         top.addEventListener('click', this.handleClick);
-
-        let color = this.p1.color;
 
         for (let x = 0; x < this.width; x++) {
             const headCell = document.createElement('td');
             headCell.setAttribute('id', x);
             top.append(headCell);
-
-            $(headCell).on("mouseover", function () {
-                $(this).css("background-color", color);
-            });
-            $(headCell).on("mouseout", function () {
-                $(this).css("background-color", "");
-            });
         }
 
         board.append(top);
@@ -114,6 +113,7 @@ class Game {
 
         // check for win
         if (this.checkForWin()) {
+            $("#column-top").css("background-color", this.currPlayer.color);
             return this.endGame(`Player ${this.currPlayer.color} won!`);
         }
 
@@ -126,10 +126,10 @@ class Game {
         this.currPlayer = this.currPlayer === this.p1 ? this.p2 : this.p1;
 
         let color = this.currPlayer.color;
-        $("#column-top td").on("mouseover", function () {
+        $("#column-top").on("mouseover", "td", function () {
             $(this).css("background-color", color);
         });
-        $("#column-top td").on("mouseout", function () {
+        $("#column-top").on("mouseout", "td", function () {
             $(this).css("background-color", "");
         });
     }
